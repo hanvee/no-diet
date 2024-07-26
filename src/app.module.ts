@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ProductModule } from './product/product.module';
 import { AuthModule } from './auth/auth.module';
+import { FoodModule } from './food/food.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    ProductModule,
     AuthModule,
+    FoodModule,
   ],
   controllers: [],
   providers: [],
