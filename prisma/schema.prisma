@@ -13,20 +13,104 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id          Int    @id @default(autoincrement())
-  name        String
-  description String
-  price       Int
-  image       String
-}
-
 model User {
-  id            Int      @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   name          String
-  email         String   @unique
+  email         String      @unique
   password      String
   refresh_token String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  userDetails   UserDetail?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model UserDetail {
+  id            Int           @id @default(autoincrement())
+  user          User          @relation(fields: [userId], references: [id])
+  userId        Int           @unique
+  currentWeight Float
+  goalWeight    Float
+  age           Int
+  gender        Gender
+  height        Float
+  activityLevel ActivityLevel
+  dietPlans     DietPlan[]
+  progress      Progress[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model DietPlan {
+  id            Int            @id @default(autoincrement())
+  userDetail    UserDetail     @relation(fields: [userDetailId], references: [id])
+  userDetailId  Int
+  startDate     DateTime
+  endDate       DateTime
+  calorieIntake Int
+  status        DietPlanStatus
+  foods         DietPlanFood[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Food {
+  id            Int            @id @default(autoincrement())
+  name          String
+  category      String
+  calories      Int
+  protein       Float
+  carbohydrates Float
+  fats          Float
+  fiber         Float
+  sugar         Float
+  dietPlanFoods DietPlanFood[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model DietPlanFood {
+  id          Int      @id @default(autoincrement())
+  dietPlan    DietPlan @relation(fields: [dietPlanId], references: [id])
+  dietPlanId  Int
+  food        Food     @relation(fields: [foodId], references: [id])
+  foodId      Int
+  servingSize Float
+  mealTime    MealTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Progress {
+  id           Int        @id @default(autoincrement())
+  userDetail   UserDetail @relation(fields: [userDetailId], references: [id])
+  userDetailId Int
+  date         DateTime
+  weight       Float
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum ActivityLevel {
+  sedentary
+  lightly_active
+  moderately_active
+  very_active
+}
+
+enum DietPlanStatus {
+  active
+  completed
+  pending
+}
+
+enum MealTime {
+  breakfast
+  lunch
+  dinner
+  snack
 }
