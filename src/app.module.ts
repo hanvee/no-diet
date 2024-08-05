@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { FoodModule } from './food/food.module';
+import { UserDetailModule } from './user-detail/user-detail.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { FoodModule } from './food/food.module';
     }),
     AuthModule,
     FoodModule,
+    UserDetailModule,
   ],
   controllers: [],
   providers: [],
